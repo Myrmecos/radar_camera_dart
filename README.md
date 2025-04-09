@@ -8,5 +8,6 @@
 1. run: `ros2 run camera_calibration cameracalibrator --size 11x8 --square 0.029 image:=/hikrobot_image`
 
 # listen to images
-1. python build `ros2 run img_sub listener`
-2. python run  `ros2 run img_sub listener`
+1. first publish image. use `ros2 run hikrobot_camera image_pub` to run image publisher
+2. python build `ros2 run img_sub listener`
+3. python run  `ros2 run img_sub listener`
