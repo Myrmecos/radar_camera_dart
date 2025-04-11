@@ -78,7 +78,6 @@ class GLPosition():
     def get_GL_angle_relative(self, pixel_pos):
         # first, prepare the pixel coordinate
         x, y = pixel_pos
-        x, y = 639, 511
         pts = np.array([[[x, y]]], dtype=np.float32)
 
         print("position relative to center before un-distortion:", pts[0][0])
