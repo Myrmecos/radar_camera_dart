@@ -3,6 +3,7 @@ PART A. Image, camera
     2. only the most circular or elliptical shape (and not the largest shape) should be selected as green light (GL)
     3. fix the camera's focal length such that it could resolve objects at 25m sharp.
     4. allow reading from a yaml file the rgb lower and upper limits of color (should we do: rgb or hsv?)
+    5. when running for several minutes, the system breaks down. There may be serious problems with mem management (but... python?)
 
 PART B. Radar.
     1. coordinates transformation (from camera to lidar)
@@ -10,3 +11,8 @@ PART B. Radar.
     3. get the estimated distance of GL. The error should be within 5cm. Best within 3cm.
 
 DEADLINE: APRIL 25th!!!!!
+
+# April 11th
+1. read min and max from yaml
+2. publish the points.
+3. find the contour that is the roundest

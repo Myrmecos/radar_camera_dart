@@ -14,14 +14,12 @@ class GLPosition():
     The width and height will be used to determine the relative angle between camera and green light.
     camera_param_path is the path to yaml file containing camera intrinsic matrix and distortion coefficient
     '''
-    def __init__(self, image_width=1280, image_height=1024, camera_param_path = "camparam.yaml", lower_color = [240, 240, 0], upper_color = [255, 255, 150]):
+    def __init__(self, image_width=1280, image_height=1024, camera_param_path = "camparam.yaml"):
         
         
         self.image_width = image_width
         self.image_height = image_height
         self.get_camera_intrinsic_distortion(camera_param_path)
-        self.lower_color = np.array(lower_color)
-        self.upper_color = np.array(upper_color)
 
     '''
     task: load camera intrinsic from a yaml file
@@ -32,6 +30,9 @@ class GLPosition():
     
         self.IM = np.matrix(contents["intrinsic_matrix"])
         self.distort = np.matrix(contents["distortion_coefficient"])
+
+        self.lower_color = np.matrix(contents["lower_color"])
+        self.upper_color = np.matrix(contents["upper_color"])
 
     '''
     Task: given the image that contains a green dot
