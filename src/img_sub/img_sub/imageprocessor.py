@@ -80,17 +80,17 @@ class GLPosition():
         x, y = pixel_pos
         pts = np.array([[[x, y]]], dtype=np.float32)
 
-        print("position relative to center before un-distortion:", pts[0][0])
+        #print("position relative to center before un-distortion:", pts[0][0])
         # then, undistort and normalize coordinates
         undistorted_pts = cv.undistortPoints(pts, self.IM, self.distort)
-        print("position of circle center after un-distortion:", undistorted_pts[0][0])
+        #print("position of circle center after un-distortion:", undistorted_pts[0][0])
         x_norm, y_norm = undistorted_pts[0][0]
 
         # finally, get the tangent value of each side
         angle_x = np.arctan2(x_norm, 1)
         angle_y = np.arctan2(y_norm, 1)
 
-        return (angle_x, angle_y)
+        return (angle_x, -angle_y)
 
 
 

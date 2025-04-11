@@ -9,5 +9,5 @@
 
 # listen to images
 1. first publish image. use `ros2 run hikrobot_camera image_pub` to run image publisher
-2. python build `ros2 run img_sub listener` colcon build --packages-select img_sub
+2. python build `colcon build --packages-select img_sub`
 3. python run  `ros2 run img_sub listener`

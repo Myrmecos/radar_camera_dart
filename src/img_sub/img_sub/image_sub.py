@@ -15,12 +15,12 @@ def drawline(image, pos, direction):
 
     if direction==0: #horizontals
         start_point = (pos, 0)
-        end_point = (pos, image.shape[1])
+        end_point = (pos, image.shape[0])
         cv.line(image, start_point, end_point, color, thickness)
 
     if direction==1:
-        start_point (0, pos)
-        end_point = (image.shape[0], pos)
+        start_point = (0, pos)
+        end_point = (image.shape[1], pos)
         cv.line(image, start_point, end_point, color, thickness)
 
 class MinimalSubscriber(Node):
@@ -54,18 +54,18 @@ class MinimalSubscriber(Node):
     def listener_callback(self, msg):
         try:
             image = self.bridge.imgmsg_to_cv2(msg, desired_encoding = 'bgr8')
-            image = cv.imread("/home/astar/ros_ws/src/img_sub/config/14.png")
-            self.get_logger().error("checkpoint1")
+            #image = cv.imread("/home/astar/ros_ws/src/img_sub/config/14.png")
+            #self.get_logger().error("checkpoint1")
             # process image
             pos = self.glp.find_green_light(image)
-            self.get_logger().error("checkpoint2")
-            self.get_logger().error(f"relative green light position to center:{pos}")
+            #self.get_logger().error("checkpoint2")
+            #self.get_logger().error(f"relative green light position to center:{pos}")
 
             if pos:
                 angles = self.glp.get_GL_angle_relative(pos)
-                print("angle relative to camera direction: (yaw, pitch)", angles) #rotation along xy plane, rotation at yz plane
-                drawline(image, np.round(pos[0]), 0)
-                drawline(image, np.round(pos[1]), 1)
+                print("angle relative to camera direction: (x, y)", angles) #rotation along xy plane, rotation at yz plane
+                drawline(image, round(pos[0]), 0)
+                drawline(image, round(pos[1]), 1)
 
             cv.imshow("image", image)
             cv.waitKey(10)
