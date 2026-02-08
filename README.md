@@ -1,12 +1,15 @@
-# export LD_LIBRARY_PATH=/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/bin if you cannot find xcb
 
 # Lidar target finding algorithm
 This package leverages lidar point cloud and RGB camera to detect target green light and report its position relative to the dart.
-It detects the light coordinate on the image,
+It detects the light coordinate on the image using rgb value filter,
 then projects the coordinate onto lidar point cloud as a ray.
 It finds the points closest to the ray,
-and cleans the point clusters to obtain the most likely points for the target.
-Finally, the center of the cluster is considered the target and we transform coordinate to obtain the target position relative to the dart center position.
+and removes the outliers to obtain the most likely points for the target.
+Finally, the center of the cluster is considered the target and we transform coordinate to obtain the target position relative to the dart center position. ![image](documents/teaser.png)
+The hardwares we use are:
+1. Livox Mid70 lidar
+2. Hikrobot camera
+3. Intel NUC
 
 # Point cloud and image recording
 This section describes how point clouds and images can be recorded.
@@ -59,6 +62,9 @@ roslaunch hikrobot_camera hikrobot_camera_save.launch
 1. point cloud: `roslaunch livox_ros_driver livox_lidar_rviz.launch`
 2. image: `roslaunch hikrobot_camera hikrobot_camera.launch`
 3. run main program: `rosrun lidar_image_align listener.py`
+![image](documents/offset.png) 
+The center of the green light will be marked by a white cross.
+The image center x coordinate will be marked by a blue line.
 
 ## Step 3: debug
 uncomment these three lines in listener.py: 
@@ -78,7 +84,7 @@ then run according to step 2. We can see the background point cloud being red an
 2. remember to `sudo chmod 766 /dev/ttyUSB0`
 3. if you still encounter unknown issues, you can run `python test_usb.py`, which sends a 18-byte package starting with A3. This may help you debug.
 
-# Start on startup
+# Start on startup (DANGEROUS)
 1. `/etc/systemd/system/rm-dart-vision.service`
 2. `sudo chmod 777 /etc/systemd/system/rm-dart-vision.service`
 3. `sudo systemctl enable rm-dart-vision.service`
@@ -93,7 +99,7 @@ then run according to step 2. We can see the background point cloud being red an
 
 
 
-# === Below are more detailed descriptions about the software. If you encountered problems, you may refer to below contents. ===
+# Below are more detailed descriptions about the software. If you encountered problems, you may refer to below contents.
 
 
 
@@ -169,7 +175,7 @@ For example, `rosrun pcl_ros bag_to_pcd calib/calibpointcloud/calibscene_test.ba
 Notes: To correctly use livox_camera_calib, you need to ensure intensity field exists in point cloud data. To read the intensity of point cloud, you can use pyntcloud. It allows you to extract the intensity field.\
 There does not seem to be a library that can directly write point cloud with "intensity" field, and you have to implement writing functionality on your own. For reference, see the end of the file croppointcloud.py.
 
-# Lidar camera calib
+# 3. Lidar camera calib
 1. transform point cloud to ascii encoding: `pcl_convert_pcd_ascii_binary /home/astar/dart_ws/calib/calibpointcloud/calibscene.pcd /home/astar/dart_ws/calib/calibpointcloud/calibscene_ascii.pcd 0`
 
 2. modify contents in livox_camera_calib/config/calib.yaml
@@ -177,13 +183,13 @@ run `roslaunch livox_camera_calib calib.launch`
 
 $_{L}^{C}T = (_{L}^{C}R, _{L}^{C}t)\in SE$
 
-# 3. automated converting-cropping
+## 3.1. automated converting-cropping
 We have a bash file for converting a bag file directly to a cropped point cloud file in ascii format, then cropping it (such that we can correctly perform the alignment using MARS lab's algorithm).
 `bash /home/astar/dart_ws/bag2pcd.sh /home/astar/dart_ws/testing_data/test0.bag`
 
-# Working together
+# 4. Working together
 
-## Notes. 
+## Notes about testing detection & projection
 To test and modify the two classes for identifying object's pixel coordinate (GLPosition in imageprocessor.py) and matching pixel coordinate to point cloud points (ImageLidarAligner in imagelidaraligner.py), you can go to this directory to play around (this does not require the use of ros and should be faster): `/home/astar/dart_ws/image_lidar_align`
 
 if the dart direction is pointing to the left of the target, we report a negative angle.
@@ -211,14 +217,14 @@ roslaunch hikrobot_camera hikrobot_camera_save.launch
 caution: when livox_camera_calib reports empty point cloud, check your camera's distortion coefficient
 
 
-# Test 
+# 5. Test 
 ## collecting test data
 1. first, start publishing images: `roslaunch hikrobot_camera hikrobot_camera_rviz.launch`
 and start publishing point cloud: `roslaunch livox_ros_driver livox_lidar_rviz.launch`
 
 2. then, record: `rosbag record -a -O testing_data/test0.bag`
 
-# Visualize lidar and camera
+# 6. Visualize lidar and camera
 1. run `roscore` in one terminal
 2. run `rviz` in another terminal
 3. in rviz window, change "fixed frame" property from "map" (or any other things) to "livox_frame". This ensures correct display of lidar points
@@ -227,7 +233,10 @@ and start publishing point cloud: `roslaunch livox_ros_driver livox_lidar_rviz.l
 
 
 <!-- # ======================================================================== -->
-# Communication
+# 7. Communication
 1. one of the USB port is not working. Please make sure you are not plugged into the wrong USB port
 2. remember to `sudo chmod 766 /dev/ttyUSB0`
 3. if you still encounter unknown issues, you can run `python test_usb.py`, which sends a 18-byte package starting with A3. This may help you debug.
+
+# 8. Other
+1. `export LD_LIBRARY_PATH=/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/bin` if you cannot find xcb

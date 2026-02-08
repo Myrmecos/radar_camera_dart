@@ -1,0 +1,2 @@
+when yaw has large error, distance is not reliable.
+rosbag record -a -O data/shenzhen0208.bag
