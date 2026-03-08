@@ -28,3 +28,7 @@ python3 /home/astar/dart_ws/image_lidar_align/croppointcloud.py $output_ascii
 # pcl_convert_pcd_ascii_binary /home/astar/dart_ws/testing_data/test0/output.pcd /home/astar/dart_ws/testing_data/test0/output_ascii.pcd 0
 # python3 /home/astar/dart_ws/image_lidar_align/croppointcloud.py /home/astar/dart_ws/testing_data/test0/output_ascii.pcd
 
+# first
+# unset LD_LIBRARY_PATH
+# source /opt/ros/noetic/setup.bash
+# bash bag2pcd.sh calib/shenzhen0309.bag

@@ -98,12 +98,12 @@ def visualize_points_by_distance1(points_2d, points_3d, cameraMatrix, image, tar
 
     # Create figure
     plt.figure(figsize=(20,16))
-    plt.imshow(image, alpha=0.8)  # Display the image
+    plt.imshow(image, alpha=0.5)  # Display the image
 
     # Plot points, colored by 3D distance
     scatter = plt.scatter(
         points_2d_pixel[:, 0], points_2d_pixel[:, 1],
-        c=distances, s=0.5, cmap='viridis', alpha=0.8
+        c=distances, s=5, cmap='viridis', alpha=0.2
     )
 
     # Plot target points (if provided)
@@ -296,7 +296,7 @@ class ImageLidarAligner:
 if __name__=="__main__":
     # read extrinsic param
     #extrinsic = readExtrinsic("/home/astar/dart_ws/calib/extrinsic.txt")
-    CAMERA_PARAM_PATH = "/home/astar/dart_ws/src/lidar_image_align/calib/calib.yaml"
+    CAMERA_PARAM_PATH = "/home/astar/dart_ws/src/livox_camera_calib/config/calib.yaml"
     im, distort, em = get_camera_intrinsic_distortion_extrinsic(CAMERA_PARAM_PATH)
 
     # read image

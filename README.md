@@ -240,3 +240,10 @@ and start publishing point cloud: `roslaunch livox_ros_driver livox_lidar_rviz.l
 
 # 8. Other
 1. `export LD_LIBRARY_PATH=/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/bin` if you cannot find xcb
+
+# modify extrinsic matrix:
+1. we assume the translation is correct and we only play around with rotation. We can find the adjust code at: `utils/adjustextrinsic/countNewMat.py`
+    1. input: x, y, z
+        1. x: positive -> elevate the 3D scene up
+        2. y: positive -> rotate 3D scene right
+        3. z: positive -> rotate 3D scene clockwise
