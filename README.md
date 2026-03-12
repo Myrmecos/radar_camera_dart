@@ -1,4 +1,21 @@
-
+# 太长不看版：
+1. 运行：
+    1. 激光雷达: `roslaunch livox_ros_driver livox_lidar_rviz.launch`。你会看到Rviz的窗口弹出来，并且显示出点云。
+        1. 如果点云不显示并且有network failure，很可能是雷达和电脑ip不一样，这时候可以运行`sudo ip addr add 192.168.1.100/24 dev enp100s0`。然后点云将会出现在Rviz窗口。
+    2. 图像采集: `roslaunch hikrobot_camera hikrobot_camera.launch`。因为没有可视化所以无事发生，但是可以在点云的Rviz窗口里通过visualize by topic->/hikrobot_camera/rgb->image来可视化。
+    3. 运行视觉: `rosrun lidar_image_align listener.py`。
+2. 潜在问题解决
+    1. 给出的距离过远：可能是相机和激光雷达相对位置有所改变。解决方案是重新标定。可以执行以下步骤：
+       1. 参考“Point cloud and image recording”来录制一个bag文件并提取点云和图像。
+       2. 调整`src/livox_camera_calib/calib.launch`中的image，point cloud和output的路径。
+       3. 运行`roslaunch livox_camera_calib calib.launch`来获得新的外参，写入`lidar_image_aligh/calib/calib.yaml`中。
+       4. 如果标定结果肉眼可见地不准，也可以参考“modify extrinsic matrix”部分，利用`radar_camera_dart/utils/adjustextrinsic/countNewMat.py`调整原有的外参矩阵，让图像和点云轮廓大致重合。
+    2. 运行`bash bag2pcd.sh`时报错，某些library找不到。可以执行以下步骤：
+        1. `unset LD_LIBRARY_PATH`
+        2. `source /opt/ros/noetic/setup.bash`
+![image](documents/offset.png) 
+The center of the green light will be marked by a white cross.
+The image center x coordinate will be marked by a blue line.
 # Lidar target finding algorithm
 This package leverages lidar point cloud and RGB camera to detect target green light and report its position relative to the dart.
 It detects the light coordinate on the image using rgb value filter,
