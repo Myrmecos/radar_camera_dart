@@ -13,6 +13,8 @@
     2. 运行`bash bag2pcd.sh`时报错，某些library找不到。可以执行以下步骤：
         1. `unset LD_LIBRARY_PATH`
         2. `source /opt/ros/noetic/setup.bash`
+      
+# Running the program
 ![image](documents/offset.png) 
 The center of the green light will be marked by a white cross.
 The image center x coordinate will be marked by a blue line.
