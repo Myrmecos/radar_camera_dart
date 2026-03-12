@@ -1,10 +1,15 @@
 # 太长不看版：
-1. 运行：
+0. 准备
+    1. 雷达
+       1. 电源插上（激光雷达在通电之后等一等会开始震动）
+       2. 通过网线和NUC连接
+    2. 相机（通过相机线和NUC连接）
+2. 运行：
     1. 激光雷达: `roslaunch livox_ros_driver livox_lidar_rviz.launch`。你会看到Rviz的窗口弹出来，并且显示出点云。
         1. 如果点云不显示并且有network failure，很可能是雷达和电脑ip不一样，这时候可以运行`sudo ip addr add 192.168.1.100/24 dev enp100s0`。然后点云将会出现在Rviz窗口。
     2. 图像采集: `roslaunch hikrobot_camera hikrobot_camera.launch`。因为没有可视化所以无事发生，但是可以在点云的Rviz窗口里通过visualize by topic->/hikrobot_camera/rgb->image来可视化。
     3. 运行视觉: `rosrun lidar_image_align listener.py`。
-2. 潜在问题解决
+3. 潜在问题解决
     1. 给出的距离过远：可能是相机和激光雷达相对位置有所改变。解决方案是重新标定。可以执行以下步骤：
        1. 参考“Point cloud and image recording”来录制一个bag文件并提取点云和图像。
        2. 调整`src/livox_camera_calib/calib.launch`中的image，point cloud和output的路径。
